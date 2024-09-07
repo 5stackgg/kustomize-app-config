@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: 5stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node-role.kubernetes.io/control-plane
+                    operator: Exists
+                  - key: 5stack-services
+                    operator: In
+                    values:
+                      - 'true'
+      containers:
+        - name: postgres
+          image: postgres:16.4
+          args:
+            - postgres
+            - '-c'
+            - fivestack.app_key=$(APP_KEY)
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          envFrom:
+            - secretRef:
+                name: postgres-secrets
+            - configMapRef:
+                name: postgres-config
+          env:
+            - name: APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: APP_KEY
+          volumeMounts:
+            - name: api-secrets
+              mountPath: /etc/api-secrets
+              readOnly: true
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+      volumes:
+        - name: api-secrets
+          secret:
+            secretName: api-secrets
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-pvc

@@ -1,0 +1,12 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: server-creator-clusterrolebinding
+subjects:
+- kind: ServiceAccount
+  name: server-creator
+  namespace: 5stack
+roleRef:
+  kind: ClusterRole
+  name: server-creator-clusterrole
+  apiGroup: rbac.authorization.k8s.io

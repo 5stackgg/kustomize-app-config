@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: 5stack
+data:
+  redis.conf: |
+    tcp-keepalive 240
+    appendonly no
+    save ""
+    maxmemory-policy noeviction
+    requirepass ${REDIS_PASSWORD}

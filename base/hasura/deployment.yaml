@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: hasura
+  name: hasura
+  namespace: 5stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hasura
+  template:
+    metadata:
+      labels:
+        app: hasura
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+              - key: 5stack-services
+                operator: In
+                values:
+                  - "true"
+      containers:
+        - image: hasura/graphql-engine:v2.43.0-ce.cli-migrations-v3
+          name: hasura
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: hasura-config 
+            - secretRef:
+                name: hasura-secrets  
+          env:
+            - name: HASURA_GRAPHQL_METADATA_DIR
+              value: /app/hasura/metadata
+            - name: HASURA_GRAPHQL_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_CONNECTION_STRING
+      initContainers:
+        - name: api-hasura-dir
+          image: ghcr.io/5stackgg/api:latest
+          command:
+            - /bin/sh
+            - -c
+            - cp -r /opt/5stack/hasura /app
+          volumeMounts:
+            - mountPath: /app
+              name: workdir
+        - name: hasura-migrations
+          image: hasura/graphql-engine:v2.43.0-ce.cli-migrations-v3
+          command:
+            - /bin/sh
+            - -c
+            - 
+          envFrom:
+            - configMapRef:
+                name: hasura-config 
+            - secretRef:
+                name: hasura-secrets  
+          env:
+            - name: HASURA_GRAPHQL_MIGRATIONS_DIR
+              value: /app/hasura/migrations
+            - name: HASURA_GRAPHQL_DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: POSTGRES_CONNECTION_STRING
+          volumeMounts:
+            - mountPath: /app
+              name: workdir
+        - name: seeders
+          image: ghcr.io/5stackgg/api:latest
+          envFrom:
+            - configMapRef:
+                name: api-config
+            - secretRef:  
+                name: api-secrets
+            - secretRef:  
+                name: steam-secrets
+            - secretRef:
+                name: hasura-secrets
+            - secretRef:  
+                name: typesense-secrets
+            - secretRef:
+                name: discord-secrets
+            - secretRef:
+                name: redis-secrets
+            - secretRef:
+                name: postgres-secrets
+            - configMapRef:
+                name: s3-config
+          env:
+            - name: RUN_MIGRATIONS
+              value: "true"
+      volumes:
+        - emptyDir: {}
+          name: workdir
+        - name: postgres-secrets
+          secret:
+            secretName: postgres-secrets

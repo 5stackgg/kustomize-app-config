@@ -1,0 +1,108 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: api
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "1G"
+    nginx.org/client-max-body-size: "1G"
+  namespace: 5stack
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: $(API_DOMAIN)
+      http:
+        paths:
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /me
+            pathType: Exact
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /matches
+            pathType: Prefix
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /server
+            pathType: Prefix
+          - backend:
+              service:
+                name: hasura
+                port:
+                  number: 8080
+            path: /v1
+            pathType: Prefix
+          - backend:
+              service:
+                name: hasura
+                port:
+                  number: 8080
+            path: /v1alpha1
+            pathType: Prefix
+          - backend:
+              service:
+                name: hasura
+                port:
+                  number: 8080
+            path: /v2
+            pathType: Prefix
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /game-server-node/script
+            pathType: Prefix
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /game-server-node/ping
+            pathType: Prefix
+    - host: $(WEB_DOMAIN)
+      http:
+        paths:
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /auth
+            pathType: Prefix
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /quick-connect
+            pathType: Exact
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /discord-bot
+            pathType: Exact
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /matches/[^/]+/backup-rounds/map/.*
+            pathType: Prefix
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /matches/[^/]+/demos/map/.*
+            pathType: Prefix

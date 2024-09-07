@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/proxy-body-size: "1G"
+    nginx.org/client-max-body-size: "1G"
+  name: s3
+  namespace: 5stack
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ${S3_ENDPOINT}
+      http:
+        paths:
+          - backend:
+              service:
+                name: minio
+                port:
+                  number: 9000
+            path: /(.*)
+            pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+  name: s3-console
+  namespace: 5stack
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ${S3_CONSOLE_HOST}
+      http:
+        paths:
+          - backend:
+              service:
+                name: minio
+                port:
+                  number: 9090
+            path: /(.*)
+            pathType: Prefix

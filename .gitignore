@@ -1,0 +1,8 @@
+# Ignore actual env and secret files
+.env
+*.env
+
+# Don't ignore example files
+!*.env.example
+
+kustomize

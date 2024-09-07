@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: 5stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+              - key: 5stack-services
+                operator: In
+                values:
+                  - "true"
+      containers:
+      - name: redis
+        image: redis:7.0.12-alpine
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        envFrom:
+          - secretRef:
+              name: redis-secrets 
+        command:
+        - sh
+        - -c
+        - |
+          sed -e "s/\${REDIS_PASSWORD}/$REDIS_PASSWORD/g" /redis-config/redis.conf > /tmp/redis.conf && redis-server /tmp/redis.conf
+        volumeMounts:
+        - name: redis-config
+          mountPath: /redis-config
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-config
+

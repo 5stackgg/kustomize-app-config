@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ws
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /ws
+  namespace: 5stack
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: $(WS_DOMAIN)
+      http:
+        paths:
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
+            path: /
+            pathType: Prefix

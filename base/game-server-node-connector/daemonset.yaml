@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: game-server-node-connector
+  name: game-server-node-connector
+  namespace: 5stack
+spec:
+  selector:
+    matchLabels:
+      app: game-server-node-connector
+  template:
+    metadata:
+      labels:
+        app: game-server-node-connector
+    spec:
+      serviceAccountName: node-metadata-reader
+      containers:
+        - image: ghcr.io/5stackgg/game-server-node:latest
+          name: game-server-node-connector
+          ports:
+            - containerPort: 80
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName

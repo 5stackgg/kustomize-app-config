@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: typesense
+  name: typesense
+  namespace: 5stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: typesense
+  template:
+    metadata:
+      labels:
+        app: typesense
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+              - key: 5stack-services
+                operator: In
+                values:
+                  - "true"
+      containers:
+        - name: typesense
+          image: typesense/typesense:27.0
+          ports:
+            - containerPort: 8108
+          volumeMounts:
+            - name: typesense-config
+              mountPath: /etc/typesense
+            - name: typesense-data
+              mountPath: /data
+          envFrom:
+            - configMapRef:
+                name: typesense-config
+            - secretRef:
+                name: typesense-secrets
+          command:
+            - /opt/typesense-server
+            - --enable-cors
+            - --cors-domains=http://localhost,https://$(TYPESENSE_HOST)
+        - name: typesense-web
+          image: ghcr.io/bfritscher/typesense-dashboard:1.9.1
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /srv/config.json
+              name: web-config
+              subPath: config.json
+      volumes:
+        - name: web-config
+          configMap:
+            name: typesense-web-config
+        - name: typesense-config
+          configMap:
+            name: typesense-config
+        - name: typesense-data
+          persistentVolumeClaim:
+            claimName: typesense-pvc

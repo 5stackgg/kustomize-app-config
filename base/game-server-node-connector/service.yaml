@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: game-server-node-connector
+  namespace: 5stack
+spec:
+  type: NodePort
+  selector:
+    app: game-server-node-connector
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30085

@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: typesense-web-config
+  namespace: 5stack
+data:
+  config.json: |
+    {
+        "apiKey": "$(TYPESENSE_API_KEY)",
+        "node": {
+            "host": $(TYPESENSE_HOST),
+            "port":"443",
+            "protocol":"https",
+            "path":"",
+            "tls": true
+        }
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: typesense-config
+  namespace: 5stack
+data:
+  TYPESENSE_DATA_DIR: /data

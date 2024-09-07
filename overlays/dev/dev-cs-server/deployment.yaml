@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-cs-server
+  namespace: 5stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dev-cs-server
+  template:
+    metadata:
+      labels:
+        app: dev-cs-server
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+      volumes:
+        - name: api-secrets
+          secret:
+            secretName: api-secrets
+        - name: steam-secrets
+          secret:
+            secretName: steam-secrets
+        - name: dev-server-secrets
+          secret:
+            secretName: dev-server-secrets
+      containers:
+        - image: ghcr.io/5stackgg/game-server:latest
+          name: dev-cs-server
+          ports:
+            - containerPort: 27015
+              protocol: TCP
+            - containerPort: 27015
+              protocol: UDP
+            - containerPort: 27020
+              protocol: TCP   
+            - containerPort: 27020
+              protocol: UDP   
+          env:
+            - name: DEV_SERVER
+              value: 'true'
+            - name: GAME_PARAMS
+              value: >-
+                -dedicated -dev +map de_inferno -usercon +game_alias competitive
+                +rcon_password ${RCON_PASSWORD} +sv_password
+                ${SERVER_PASSWORD} -authkey ${AUTH_KEY} -maxplayers
+                11
+                +sv_setsteamaccount ${STEAM_LOGIN}
+            - name: AUTH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: CS_AUTH_KEY
+            - name: STEAM_LOGIN
+              valueFrom:
+                secretKeyRef:
+                  name: steam-secrets
+                  key: STEAM_LOGIN
+            - name: PASSWRD
+              valueFrom:
+                secretKeyRef:
+                  name: api-secrets
+                  key: SERVER_ACCOUNT_PASSWORD
+            - name: SERVER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-server-secrets
+                  key: SERVER_PASSWORD
+            - name: RCON_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-server-secrets
+                  key: RCON_PASSWORD
+            - name: SERVER_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dev-server-secrets
+                  key: SERVER_ID
+            - name: SERVER_API_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: dev-server-secrets
+                  key: SERVER_API_PASSWORD
+          resources:
+            limits:
+              memory: 10Gi
+          volumeMounts:
+            - name: api-secrets
+              mountPath: /app/secrets
+              readOnly: true
+            - name: steam-secrets
+              mountPath: /app/steam-secrets
+              readOnly: true
+            - name: dev-server-secrets
+              mountPath: /app/dev-server-secrets
+              readOnly: true

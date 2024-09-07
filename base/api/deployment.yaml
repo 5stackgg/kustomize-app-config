@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api
+  name: api
+  namespace: 5stack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      serviceAccountName: server-creator
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+              - key: 5stack-services
+                operator: In
+                values:
+                  - "true"
+      containers:
+        - image: ghcr.io/5stackgg/api:latest
+          name: api
+          ports:
+            - containerPort: 5585
+            - containerPort: 5586
+          envFrom:
+            - configMapRef:
+                name: api-config
+            - secretRef:  
+                name: api-secrets
+            - secretRef:  
+                name: steam-secrets
+            - secretRef:
+                name: hasura-secrets
+            - secretRef:  
+                name: typesense-secrets
+            - secretRef:
+                name: discord-secrets
+            - secretRef:
+                name: redis-secrets
+            - secretRef:
+                name: postgres-secrets
+            - configMapRef:
+                name: s3-config
+            - configMapRef:
+                name: hasura-config
+          volumeMounts:
+            - name: demos
+              mountPath: /opt/demos
+      volumes:
+        - name: demos
+          persistentVolumeClaim:
+            claimName: demos-pvc  
