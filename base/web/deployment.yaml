@@ -32,6 +32,26 @@ spec:
           ports:
             - containerPort: 3000
           env:
+            - name: NEXT_PUBLIC_API_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: API_DOMAIN
+            - name: NUXT_PUBLIC_WEB_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: web-config
+                  key: WEB_DOMAIN
+            - name: NEXT_PUBLIC_WS_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: WS_DOMAIN
+            - name: NUXT_PUBLIC_TYPESENSE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: typesense-config
+                  key: TYPESENSE_HOST 
             - name: HASURA_GRAPHQL_ENDPOINT
               valueFrom:
                 configMapKeyRef:
