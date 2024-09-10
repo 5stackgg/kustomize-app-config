@@ -45,3 +45,11 @@ Currently only linux x86_64 systems are supported.
 	D. re-run `./kustomize build base | kubectl apply -f -` to apply the changes
 
 5. run the `./update` script after updating the s3-secrets.env file
+
+
+### Update Script Params
+--kubeconfig : the path to the kubeconfig file
+
+example:
+
+`./update --kubeconfig ~/.kube/5stack`	
