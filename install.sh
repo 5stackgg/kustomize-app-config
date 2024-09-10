@@ -16,7 +16,7 @@ curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack
 echo "Installing k3s ..."
 curl -sfL https://get.k3s.io | sh -s - --disable=traefik 
 
-kubectl -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
 
 echo "Updating Node to host services"
 kubectl label node $(kubectl get nodes -o jsonpath='{.items[0].metadata.name}') 5stack-services=true
