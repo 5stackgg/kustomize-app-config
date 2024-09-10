@@ -31,3 +31,19 @@ spec:
           name: web
           ports:
             - containerPort: 3000
+          env:
+            - name: HASURA_GRAPHQL_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: API_DOMAIN
+            - name: HASURA_GRAPHQL_ADMIN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hasura-secrets
+                  key: HASURA_GRAPHQL_ADMIN_SECRET
+            - name: TYPESENSE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: typesense-secrets
+                  key: TYPESENSE_API_KEY
