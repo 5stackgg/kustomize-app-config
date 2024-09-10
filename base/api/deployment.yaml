@@ -50,6 +50,10 @@ spec:
                 name: redis-secrets
             - secretRef:
                 name: postgres-secrets
+            - secretRef:
+                name: tailscale-secrets
+            - secretRef:
+                name: s3-secrets
             - configMapRef:
                 name: s3-config
             - configMapRef:
