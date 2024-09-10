@@ -70,7 +70,6 @@ POSTGRES_PASSWORD=$(grep "^POSTGRES_PASSWORD=" base/secrets/postgres-secrets.env
 POSTGRES_CONNECTION_STRING="postgres://hasura:$POSTGRES_PASSWORD@postgres:5432/hasura"
 
 if grep -q "^POSTGRES_CONNECTION_STRING=" base/secrets/postgres-secrets.env; then
-    # If it exists, update it
     if [[ "$OSTYPE" == "darwin"* ]]; then
         sed -i '' "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/postgres-secrets.env
     else
@@ -79,6 +78,20 @@ if grep -q "^POSTGRES_CONNECTION_STRING=" base/secrets/postgres-secrets.env; the
 else
     echo "" >> base/secrets/postgres-secrets.env
     echo "POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING" >> base/secrets/postgres-secrets.env
+fi
+
+
+K3S_TOKEN=$(cat /var/lib/rancher/k3s/server/node-token)
+
+if grep -q "^K3S_TOKEN=" base/secrets/api-secrets.env; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s|^K3S_TOKEN=.*|K3S_TOKEN=$K3S_TOKEN|" base/secrets/api-secrets.env
+    else
+        sed -i "s|^K3S_TOKEN=.*|K3S_TOKEN=$K3S_TOKEN|" base/secrets/api-secrets.env
+    fi
+else
+    echo "" >> base/secrets/api-secrets.env
+    echo "K3S_TOKEN=$K3S_TOKEN" >> base/secrets/api-secrets.env
 fi
 
 
