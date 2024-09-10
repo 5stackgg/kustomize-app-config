@@ -29,7 +29,11 @@ for env_file in base/secrets/*.env; do
         # Generate a random base64 encoded string
         random_string=$(openssl rand -base64 32)
         
-        sed -i '' "s|\$(RAND32)|$random_string|g" "$env_file"
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            sed -i '' "s|\$(RAND32)|$random_string|g" "$env_file"
+        else
+            sed -i "s|\$(RAND32)|$random_string|g" "$env_file"
+        fi
     fi
 done
 
@@ -67,7 +71,11 @@ POSTGRES_CONNECTION_STRING="postgres://hasura:$POSTGRES_PASSWORD@postgres:5432/h
 
 if grep -q "^POSTGRES_CONNECTION_STRING=" base/secrets/postgres-secrets.env; then
     # If it exists, update it
-    sed -i '' "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/postgres-secrets.env
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/postgres-secrets.env
+    else
+        sed -i "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/postgres-secrets.env
+    fi
 else
     echo "" >> base/secrets/postgres-secrets.env
     echo "POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING" >> base/secrets/postgres-secrets.env
