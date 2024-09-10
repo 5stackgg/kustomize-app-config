@@ -47,26 +47,7 @@ spec:
               value: 'true'
             - name: GAME_PARAMS
               value: >-
-                -dedicated -dev +map de_inferno -usercon +game_alias competitive
-                +rcon_password ${RCON_PASSWORD} +sv_password
-                ${SERVER_PASSWORD} -authkey ${AUTH_KEY} -maxplayers
-                11
-                +sv_setsteamaccount ${STEAM_LOGIN}
-            - name: AUTH_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: api-secrets
-                  key: CS_AUTH_KEY
-            - name: STEAM_LOGIN
-              valueFrom:
-                secretKeyRef:
-                  name: steam-secrets
-                  key: STEAM_LOGIN
-            - name: PASSWRD
-              valueFrom:
-                secretKeyRef:
-                  name: api-secrets
-                  key: SERVER_ACCOUNT_PASSWORD
+                -dedicated -dev +map de_inferno -usercon +game_alias competitive+rcon_password ${RCON_PASSWORD} +sv_password ${SERVER_PASSWORD} -maxplayers 11
             - name: SERVER_PASSWORD
               valueFrom:
                 secretKeyRef:
