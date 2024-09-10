@@ -44,6 +44,9 @@ spec:
                 secretKeyRef:
                   name: postgres-secrets
                   key: POSTGRES_CONNECTION_STRING
+          volumeMounts:
+            - mountPath: /app
+              name: workdir
       initContainers:
         - name: api-hasura-dir
           image: ghcr.io/5stackgg/api:latest
@@ -54,29 +57,7 @@ spec:
           volumeMounts:
             - mountPath: /app
               name: workdir
-        - name: hasura-migrations
-          image: hasura/graphql-engine:v2.43.0-ce.cli-migrations-v3
-          command:
-            - /bin/sh
-            - -c
-            - 
-          envFrom:
-            - configMapRef:
-                name: hasura-config 
-            - secretRef:
-                name: hasura-secrets  
-          env:
-            - name: HASURA_GRAPHQL_MIGRATIONS_DIR
-              value: /app/hasura/migrations
-            - name: HASURA_GRAPHQL_DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secrets
-                  key: POSTGRES_CONNECTION_STRING
-          volumeMounts:
-            - mountPath: /app
-              name: workdir
-        - name: seeders
+        - name: migrations
           image: ghcr.io/5stackgg/api:latest
           envFrom:
             - configMapRef:
