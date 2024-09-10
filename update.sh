@@ -1,5 +1,38 @@
 #!/bin/bash
 
+for file in base/secrets/*.env.example; do
+    env_file="${file%.example}"
+    if [ ! -f "$env_file" ]; then
+        cp "$file" "$env_file"
+    fi
+done
+
+for file in overlays/dev/secrets/*.env.example; do
+    env_file="${file%.example}"
+    if [ ! -f "$env_file" ]; then
+        cp "$file" "$env_file"
+    fi
+done
+
+
+for file in base/properties/*.env.example; do
+    env_file="${file%.example}"
+    if [ ! -f "$env_file" ]; then
+        cp "$file" "$env_file"
+    fi
+done
+
+
+# Replace $(RAND32) with a random base64 encoded string in all non-example env files
+for env_file in base/secrets/*.env; do
+    if [[ -f "$env_file" && ! "$env_file" == *.example ]]; then
+        # Generate a random base64 encoded string
+        random_string=$(openssl rand -base64 32)
+        
+        sed -i '' "s|\$(RAND32)|$random_string|g" "$env_file"
+    fi
+done
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         --kubeconfig)

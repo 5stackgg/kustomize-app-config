@@ -1,38 +1,4 @@
 #!/bin/bash
-for file in base/secrets/*.env.example; do
-    env_file="${file%.example}"
-    if [ ! -f "$env_file" ]; then
-        cp "$file" "$env_file"
-    fi
-done
-
-for file in overlays/dev/secrets/*.env.example; do
-    env_file="${file%.example}"
-    if [ ! -f "$env_file" ]; then
-        cp "$file" "$env_file"
-    fi
-done
-
-
-for file in base/properties/*.env.example; do
-    env_file="${file%.example}"
-    if [ ! -f "$env_file" ]; then
-        cp "$file" "$env_file"
-    fi
-done
-
-
-# Replace $(RAND32) with a random base64 encoded string in all non-example env files
-for env_file in base/secrets/*.env; do
-    if [[ -f "$env_file" && ! "$env_file" == *.example ]]; then
-        # Generate a random base64 encoded string
-        random_string=$(openssl rand -base64 32)
-        
-        sed -i '' "s|\$(RAND32)|$random_string|g" "$env_file"
-    fi
-done
-
-
 echo "Setup FileSystem"
 mkdir -p /opt/5stack/dev
 mkdir -p /opt/5stack/demos
@@ -41,8 +7,6 @@ mkdir -p /opt/5stack/serverfiles
 mkdir -p /opt/5stack/postgres
 mkdir -p /opt/5stack/typesense
 mkdir -p /opt/5stack/minio
-
-
 
 echo "Environment files setup complete"
 
