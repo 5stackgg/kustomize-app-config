@@ -18,8 +18,10 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: Exists
+              - key: 5stack-dev-server
+                operator: In
+                values:
+                  - "true"
       volumes:
         - name: api-secrets
           secret:

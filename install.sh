@@ -19,9 +19,8 @@ curl -sfL https://get.k3s.io | sh -s - --disable=traefik
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/baremetal/deploy.yaml
 
 echo "Updating Node to host services"
-kubectl label node $(kubectl get nodes -o jsonpath='{.items[0].metadata.name}') 5stack-services=true
+kubectl label node $(kubectl get nodes -o jsonpath='{.items[0].metadata.name}') 5stack-api=true 5stack-hasura=true 5stack-minio=true 5stack-postgres=true 5stack-redis=true 5stack-typesense=true 5stack-web=true
 
 
 echo "Updating 5stack ..."
 ./update.sh
-

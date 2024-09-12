@@ -20,9 +20,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
             - matchExpressions:
-              - key: node-role.kubernetes.io/control-plane
-                operator: Exists
-              - key: 5stack-services
+              - key: 5stack-minio
                 operator: In
                 values:
                   - "true"
