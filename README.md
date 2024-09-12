@@ -1,17 +1,11 @@
 Currently only linux x86_64 systems are supported.
 
 
-## Intasll
-
-`./install.sh`
+Running `./install.sh` should walk you through the process of setting up the  5stack panel.
 
 
-## Setup Tailscale
-
-1. You will need to install tailscale on the control plane machine (the machien where you intsalled k3s)
-
-
-3. ACL
+### Tailscale ACL
+You should limit the access that tilasclae will give to these machines. The following is an example of what the ACL should look like.
 
 ```
 {
@@ -37,14 +31,14 @@ Currently only linux x86_64 systems are supported.
 }
 ```
 
-
-4. Create s3 Bucket at your s3 URL provided 
+### Minio Setup
+Create Minio Bucket at your Minio URL provided in your config
 	A. https://console.5stack.gg/buckets
 	B. To to the access keys tab and create a new access key for the user you created in step 1
 	C. Copy the access key id and secret to the s3-secrets.env file
 	D. re-run `./kustomize build base | kubectl apply -f -` to apply the changes
 
-5. run the `./update` script after updating the s3-secrets.env file
+run the `./update` script after updating the s3-secrets.env file
 
 
 ### Update Script Params
