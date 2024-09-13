@@ -40,9 +40,12 @@ spec:
           env:
             - name: DEV_SERVER
               value: 'true'
-            - name: GAME_PARAMS
-              value: >-
-                -dedicated -dev +map de_inferno -usercon +game_alias competitive+rcon_password ${RCON_PASSWORD} +sv_password ${SERVER_PASSWORD} -maxplayers 11
+            - name: SERVER_PORT
+              value: '27015'
+            - name: TV_PORT
+              value: '27020'
+            - name: EXTRA_GAME_PARAMS
+              value: -maxplayers 13
           resources:
             limits:
               memory: 10Gi
