@@ -67,7 +67,7 @@ echo "using kubeconfig: $KUBECONFIG"
 
 
 POSTGRES_PASSWORD=$(grep "^POSTGRES_PASSWORD=" base/secrets/postgres-secrets.env | cut -d '=' -f2-)
-POSTGRES_CONNECTION_STRING="postgres://hasura:$POSTGRES_PASSWORD@postgres:5432/hasura?statement_timeout=30000"
+POSTGRES_CONNECTION_STRING="postgres://hasura:$POSTGRES_PASSWORD@postgres:5432/hasura"
 
 if grep -q "^POSTGRES_CONNECTION_STRING=" base/secrets/postgres-secrets.env; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
