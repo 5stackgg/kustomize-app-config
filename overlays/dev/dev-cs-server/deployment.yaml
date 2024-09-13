@@ -22,16 +22,6 @@ spec:
                 operator: In
                 values:
                   - "true"
-      volumes:
-        - name: api-secrets
-          secret:
-            secretName: api-secrets
-        - name: steam-secrets
-          secret:
-            secretName: steam-secrets
-        - name: dev-server-secrets
-          secret:
-            secretName: dev-server-secrets
       containers:
         - image: ghcr.io/5stackgg/game-server:latest
           name: dev-cs-server
@@ -44,42 +34,41 @@ spec:
               protocol: TCP   
             - containerPort: 27020
               protocol: UDP   
+          envFrom:
+            - secretRef:
+                name: dev-server-secrets
           env:
             - name: DEV_SERVER
               value: 'true'
             - name: GAME_PARAMS
               value: >-
                 -dedicated -dev +map de_inferno -usercon +game_alias competitive+rcon_password ${RCON_PASSWORD} +sv_password ${SERVER_PASSWORD} -maxplayers 11
-            - name: SERVER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: dev-server-secrets
-                  key: SERVER_PASSWORD
-            - name: RCON_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: dev-server-secrets
-                  key: RCON_PASSWORD
-            - name: SERVER_ID
-              valueFrom:
-                secretKeyRef:
-                  name: dev-server-secrets
-                  key: SERVER_ID
-            - name: SERVER_API_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: dev-server-secrets
-                  key: SERVER_API_PASSWORD
           resources:
             limits:
               memory: 10Gi
           volumeMounts:
-            - name: api-secrets
-              mountPath: /app/secrets
-              readOnly: true
-            - name: steam-secrets
-              mountPath: /app/steam-secrets
-              readOnly: true
-            - name: dev-server-secrets
-              mountPath: /app/dev-server-secrets
-              readOnly: true
+            - name: steamcmd
+              mountPath: /serverdata/steamcmd
+            - name: serverfiles
+              mountPath: /serverdata/serverfiles
+            - name: demos
+              mountPath: /opt/demos
+            - name: dev
+              mountPath: /opt/dev
+      volumes:
+        - name: steamcmd
+          hostPath:
+            path: /opt/5stack/steamcmd
+            type: Directory
+        - name: serverfiles
+          hostPath:
+            path: /opt/5stack/serverfiles
+            type: Directory
+        - name: demos
+          hostPath:
+            path: /opt/5stack/demos
+            type: Directory
+        - name: dev
+          hostPath:
+            path: /opt/5stack/dev
+            type: DirectoryOrCreate

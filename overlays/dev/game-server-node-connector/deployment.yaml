@@ -1,23 +1,32 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   labels:
-    app: game-server-node-connector
-  name: game-server-node-connector
+    app: dev-game-server-node-connector
+  name: dev-game-server-node-connector
   namespace: 5stack
 spec:
   selector:
     matchLabels:
-      app: game-server-node-connector
+      app: dev-game-server-node-connector
   template:
     metadata:
       labels:
-        app: game-server-node-connector
+        app: dev-game-server-node-connector
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: 5stack-dev-server
+                operator: In
+                values:
+                  - "true"
       serviceAccountName: node-metadata-reader
       containers:
         - image: ghcr.io/5stackgg/game-server-node:latest
-          name: game-server-node-connector
+          name: dev-game-server-node-connector
           env:
             - name: NODE_NAME
               valueFrom:
