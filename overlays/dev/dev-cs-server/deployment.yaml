@@ -46,6 +46,8 @@ spec:
               value: '27020'
             - name: EXTRA_GAME_PARAMS
               value: -maxplayers 13
+            - name: ALLOW_BOTS
+              value: "true"
           resources:
             limits:
               memory: 10Gi
