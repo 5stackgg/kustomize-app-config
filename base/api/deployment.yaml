@@ -56,10 +56,3 @@ spec:
                 name: s3-config
             - configMapRef:
                 name: hasura-config
-          volumeMounts:
-            - name: demos
-              mountPath: /opt/demos
-      volumes:
-        - name: demos
-          persistentVolumeClaim:
-            claimName: demos-pvc  
