@@ -75,7 +75,7 @@ spec:
           hostPath:
             path: /opt/5stack/demos
             type: Directory
-        - name: demos
+        - name: core-dumps
           hostPath:
             path: /opt/5stack/core-dumps
             type: Directory
