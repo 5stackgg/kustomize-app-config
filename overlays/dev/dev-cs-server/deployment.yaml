@@ -58,10 +58,9 @@ spec:
               mountPath: /serverdata/serverfiles
             - name: demos
               mountPath: /opt/demos
-            - name: core-dumps
-              mountPath: /cores
             - name: dev
               mountPath: /opt/dev
+            
       volumes:
         - name: steamcmd
           hostPath:
@@ -75,7 +74,7 @@ spec:
           hostPath:
             path: /opt/5stack/demos
             type: Directory
-        - name: core-dumps
+        - name: dev
           hostPath:
-            path: /opt/5stack/core-dumps
+            path: /opt/5stack/dev
             type: Directory
