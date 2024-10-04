@@ -60,6 +60,8 @@ spec:
               mountPath: /opt/demos
             - name: dev
               mountPath: /opt/dev
+            - name: core-dumps
+              mountPath: /cores
       volumes:
         - name: steamcmd
           hostPath:
@@ -72,6 +74,10 @@ spec:
         - name: demos
           hostPath:
             path: /opt/5stack/demos
+            type: Directory
+        - name: demos
+          hostPath:
+            path: /opt/5stack/core-dumps
             type: Directory
         - name: dev
           hostPath:

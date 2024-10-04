@@ -16,7 +16,7 @@ spec:
     required:
       nodeSelectorTerms:
       - matchExpressions:
-        - key: 5stack-services
+        - key: 5stack-typesense
           operator: In
           values:
           - "true"

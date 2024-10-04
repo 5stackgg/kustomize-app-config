@@ -5,6 +5,4 @@ resources:
   - demos-pv.yaml
   - minio-pv.yaml
   - postgres-pv.yaml
-  - serverfiles-pv.yaml
-  - steamcmd-pv.yaml
   - typesense-pv.yaml
