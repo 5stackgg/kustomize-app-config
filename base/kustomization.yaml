@@ -62,6 +62,16 @@ replacements:
 - source:
     kind: ConfigMap
     name: api-config
+    fieldPath: data.DEMOS_DOMAIN
+  targets:
+  - select:
+      kind: Ingress
+      name: demos
+    fieldPaths:
+    - spec.rules.0.host
+- source:
+    kind: ConfigMap
+    name: api-config
     fieldPath: data.WEB_DOMAIN
   targets:
   - select:

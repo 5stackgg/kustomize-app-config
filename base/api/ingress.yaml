@@ -3,8 +3,7 @@ kind: Ingress
 metadata:
   name: api
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: "1G"
-    nginx.org/client-max-body-size: "1G"
+
   namespace: 5stack
 spec:
   ingressClassName: nginx
@@ -99,10 +98,30 @@ spec:
                   number: 5585
             path: /matches/[^/]+/backup-rounds/map/.*
             pathType: Prefix
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demos
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/client-max-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+    nginx.ingress.kubernetes.io/chunked-transfer-encoding: "false"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+  namespace: 5stack
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: upload.5stack.gg
+      http:
+        paths:
           - backend:
               service:
                 name: api
                 port:
                   number: 5585
-            path: /matches/[^/]+/demos/map/.*
+            path: /demos
             pathType: Prefix
