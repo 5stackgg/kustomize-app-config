@@ -12,7 +12,6 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
     nginx.ingress.kubernetes.io/ignore-invalid-headers: "true"
-
   name: s3
   namespace: 5stack
 spec:
@@ -32,6 +31,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
   name: s3-console
   namespace: 5stack
 spec:
