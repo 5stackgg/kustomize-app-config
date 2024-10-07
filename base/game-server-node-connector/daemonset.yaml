@@ -14,7 +14,7 @@ spec:
       labels:
         app: game-server-node-connector
     spec:
-      serviceAccountName: node-metadata-reader
+      serviceAccountName: game-server-node-connector
       containers:
         - image: ghcr.io/5stackgg/game-server-node:latest
           name: game-server-node-connector

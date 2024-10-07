@@ -23,7 +23,7 @@ spec:
                 operator: In
                 values:
                   - "true"
-      serviceAccountName: node-metadata-reader
+      serviceAccountName: game-server-node-connector
       containers:
         - image: ghcr.io/5stackgg/game-server-node:latest
           name: dev-game-server-node-connector
