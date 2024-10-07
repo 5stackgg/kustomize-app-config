@@ -14,6 +14,7 @@ spec:
       labels:
         app: game-server-node-connector
     spec:
+      hostNetwork: true
       serviceAccountName: game-server-node-connector
       containers:
         - image: ghcr.io/5stackgg/game-server-node:latest
@@ -31,4 +32,3 @@ spec:
           hostPath:
             path: /opt/5stack/serverfiles
             type: Directory
-   
