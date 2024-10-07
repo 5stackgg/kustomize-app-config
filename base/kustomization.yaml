@@ -85,16 +85,6 @@ replacements:
     fieldPaths:
     - spec.rules.0.host
 - source:
-    kind: ConfigMap 
-    name: s3-config 
-    fieldPath: data.S3_ENDPOINT
-  targets:
-  - select:
-      kind: Ingress
-      name: s3
-    fieldPaths:
-    - spec.rules.0.host
-- source:
     kind: ConfigMap
     name: s3-config
     fieldPath: data.S3_CONSOLE_HOST
