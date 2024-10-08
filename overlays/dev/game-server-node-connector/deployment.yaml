@@ -43,6 +43,11 @@ spec:
                 configMapKeyRef:
                   name: api-config
                   key: DEMOS_DOMAIN
+            - name: WS_DOMAIN
+              valueFrom:
+                configMapKeyRef:
+                  name: api-config
+                  key: WS_DOMAIN
           volumeMounts:
             - name: server-files
               mountPath: /serverfiles
