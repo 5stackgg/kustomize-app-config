@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: ws
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /ws
+    nginx.ingress.kubernetes.io/rewrite-target: /ws/$1
   namespace: 5stack
 spec:
   ingressClassName: nginx
@@ -16,5 +16,5 @@ spec:
                 name: api
                 port:
                   number: 5585
-            path: /
+            path: /(.*)
             pathType: Prefix
