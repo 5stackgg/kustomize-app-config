@@ -2,6 +2,8 @@ Currently only linux x86_64 systems are supported.
 
 Running `./install.sh` should walk you through the process of setting up the 5stack panel.
 
+## Using Reverse Proxy
+
 ### Tailscale ACL
 
 You should limit the access that tilasclae will give to these machines. The following is an example of what the ACL should look like.
