@@ -50,14 +50,10 @@ replacements:
   - source:
       kind: ConfigMap
       name: api-config
-      fieldPath: data.WEB_DOMAIN
+      fieldPath: data.MAIL_FROM
     targets:
       - select:
-          kind: ClusterIssuer
+          kind: Issuer
           name: letsencrypt-prod
         fieldPaths:
           - spec.acme.email
-    options:
-      delimiter: "@"
-      index: 0
-      template: "hello@{{.}}"
