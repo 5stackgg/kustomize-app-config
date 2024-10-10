@@ -7,12 +7,6 @@ spec:
   secretName: secret-tls
   renewBefore: 240h
   duration: 2160h
-  commonName: ${WEB_DOMAIN}
-  dnsNames:
-  - ${WEB_DOMAIN}
-  - ${WS_DOMAIN}
-  - ${API_DOMAIN}
-  - ${DEMOS_DOMAIN}
   issuerRef:
     name: letsencrypt-prod
     kind: Issuer
