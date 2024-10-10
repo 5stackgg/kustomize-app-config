@@ -15,4 +15,4 @@ spec:
   - ${DEMOS_DOMAIN}
   issuerRef:
     name: letsencrypt-prod
-    kind: ClusterIssuer
+    kind: Issuer
