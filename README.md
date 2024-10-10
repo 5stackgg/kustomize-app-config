@@ -1,8 +1,22 @@
 Currently only linux x86_64 systems are supported.
 
+
+## Installing 
+
 Running `./install.sh` should walk you through the process of setting up the 5stack panel.
 
+
+## Updating
+
+If there is an update to the config you will want to run `./update.sh` 
+
+## using a speific kubeconig
+
+add the kubeconfig flag : examle `/update.sh --kubeconfig ~/.kube/5stackgg`
+
 ## Using Reverse Proxy
+
+If you wish to use a reverse proxy you will want to add the `--reverse-proxy` flag to the update sript after doing the base install.
 
 ### Tailscale ACL
 
@@ -32,7 +46,7 @@ You should limit the access that tilasclae will give to these machines. The foll
 }
 ```
 
-### Minio Setup
+### Minio (S3) Setup
 
 Create Minio Bucket at your Minio URL provided in your config
 A. https://console.5stack.gg/buckets
@@ -49,3 +63,6 @@ run the `./update` script after updating the s3-secrets.env file
 example:
 
 `./update --kubeconfig ~/.kube/5stack`
+
+## Custom S3 
+You can use a custom s3 provider like backblaze, update the config avlues  in your `base/properiteis/api-config.env `
