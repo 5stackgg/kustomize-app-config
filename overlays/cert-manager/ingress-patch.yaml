@@ -1,4 +1,11 @@
 - op: add
   path: /metadata/annotations
   value:
-    cert-manager.io/issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+- op: add
+  path: /spec/tls
+  value:
+    - hosts:
+        - HOST
+      secretName: letsencrypt-prod
