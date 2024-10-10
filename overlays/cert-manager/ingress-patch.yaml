@@ -1,7 +1,6 @@
 - op: add
-  path: /metadata/annotations
-  value:
-    cert-manager.io/issuer: letsencrypt-prod
+  path: /metadata/annotations/cert-manager.io~1issuer
+  value: letsencrypt-prod
 
 - op: add
   path: /spec/tls
