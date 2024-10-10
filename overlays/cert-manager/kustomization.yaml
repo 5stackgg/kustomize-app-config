@@ -1,0 +1,63 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+  - issuer.yaml
+  - certificate.yaml
+
+replacements:
+  - source:
+      kind: ConfigMap
+      name: api-config
+      fieldPath: data.WEB_DOMAIN
+    targets:
+      - select:
+          kind: Certificate
+          name: 5stack
+        fieldPaths:
+          - spec.commonName
+          - spec.dnsNames.0
+  - source:
+      kind: ConfigMap
+      name: api-config
+      fieldPath: data.WS_DOMAIN
+    targets:
+      - select:
+          kind: Certificate
+          name: 5stack
+        fieldPaths:
+          - spec.dnsNames.1
+  - source:
+      kind: ConfigMap
+      name: api-config
+      fieldPath: data.API_DOMAIN
+    targets:
+      - select:
+          kind: Certificate
+          name: 5stack
+        fieldPaths:
+          - spec.dnsNames.2
+  - source:
+      kind: ConfigMap
+      name: api-config
+      fieldPath: data.DEMOS_DOMAIN
+    targets:
+      - select:
+          kind: Certificate
+          name: 5stack
+        fieldPaths:
+          - spec.dnsNames.3
+  - source:
+      kind: ConfigMap
+      name: api-config
+      fieldPath: data.WEB_DOMAIN
+    targets:
+      - select:
+          kind: ClusterIssuer
+          name: letsencrypt-prod
+        fieldPaths:
+          - spec.acme.email
+    options:
+      delimiter: "@"
+      index: 0
+      template: "hello@{{.}}"
