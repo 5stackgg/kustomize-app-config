@@ -65,4 +65,4 @@ example:
 `./update --kubeconfig ~/.kube/5stack`
 
 ## Custom S3 
-You can use a custom s3 provider like backblaze, update the config avlues  in your `base/properiteis/api-config.env `
+You can use a custom s3 provider like backblaze, update the config avlues  in your `base/properties/api-config.env `, and `base/secrets/s3-secrets.env`.
