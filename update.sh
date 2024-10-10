@@ -14,14 +14,12 @@ for file in overlays/dev/secrets/*.env.example; do
     fi
 done
 
-
 for file in base/properties/*.env.example; do
     env_file="${file%.example}"
     if [ ! -f "$env_file" ]; then
         cp "$file" "$env_file"
     fi
 done
-
 
 # Replace $(RAND32) with a random base64 encoded string in all non-example env files
 for env_file in base/secrets/*.env; do
@@ -37,11 +35,17 @@ for env_file in base/secrets/*.env; do
     fi
 done
 
+REVERSE_PROXY=false
+
 while [[ $# -gt 0 ]]; do
     case $1 in
         --kubeconfig)
             KUBECONFIG="$2"
             shift 2
+            ;;
+        --reverse-proxy)
+            REVERSE_PROXY=true
+            shift
             ;;
         *)
             echo "Unknown option: $1"
@@ -54,7 +58,6 @@ if [ -z "$KUBECONFIG" ]; then
     KUBECONFIG="/etc/rancher/k3s/k3s.yaml"
 fi
 
-
 if ! [ -f ./kustomize ] || ! [ -x ./kustomize ]
 then
     echo "kustomize not found. Installing..."
@@ -64,7 +67,6 @@ else
 fi
 
 echo "using kubeconfig: $KUBECONFIG"
-
 
 POSTGRES_PASSWORD=$(grep "^POSTGRES_PASSWORD=" base/secrets/postgres-secrets.env | cut -d '=' -f2-)
 POSTGRES_CONNECTION_STRING="postgres://hasura:$POSTGRES_PASSWORD@postgres:5432/hasura"
@@ -80,7 +82,6 @@ else
     echo "POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING" >> base/secrets/postgres-secrets.env
 fi
 
-
 K3S_TOKEN=$(cat /var/lib/rancher/k3s/server/node-token)
 
 if grep -q "^K3S_TOKEN=" base/secrets/api-secrets.env; then
@@ -94,7 +95,11 @@ else
     echo "K3S_TOKEN=$K3S_TOKEN" >> base/secrets/api-secrets.env
 fi
 
-
-./kustomize build base | kubectl --kubeconfig=$KUBECONFIG apply -f -
+if [ "$REVERSE_PROXY" = true ]; then
+    ./kustomize build base | kubectl --kubeconfig=$KUBECONFIG apply -f -
+else 
+    kubectl --kubeconfig=$KUBECONFIG apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.16.1/cert-manager.yaml
+    ./kustomize build overlays/cert-manager | kubectl --kubeconfig=$KUBECONFIG apply -f -
+fi
 
 echo "5stack Updated"
