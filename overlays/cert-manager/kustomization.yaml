@@ -68,38 +68,11 @@ replacements:
           kind: Ingress
           name: '.*'
         fieldPaths:
-          - spec.tls[0].hosts[0]
-          - spec.rules[0].host
-  - source:
-      kind: ConfigMap
-      name: api-config
-      fieldPath: data.WS_DOMAIN
-    targets:
-      - select:
-          kind: Ingress
-          name: '.*'
-        fieldPaths:
-          - spec.tls[0].hosts[1]
-          - spec.rules[1].host
-  - source:
-      kind: ConfigMap
-      name: api-config
-      fieldPath: data.API_DOMAIN
-    targets:
-      - select:
-          kind: Ingress
-          name: '.*'
-        fieldPaths:
-          - spec.tls[0].hosts[2]
-          - spec.rules[2].host
-  - source:
-      kind: ConfigMap
-      name: api-config
-      fieldPath: data.DEMOS_DOMAIN
-    targets:
-      - select:
-          kind: Ingress
-          name: '.*'
-        fieldPaths:
-          - spec.tls[0].hosts[3]
-          - spec.rules[3].host
+          - metadata.annotations.[cert-manager.io/cluster-issuer]
+  - target:
+      kind: Ingress
+      name: '.*'
+    patch: |-
+      - op: add
+        path: /metadata/annotations/cert-manager.io~1cluster-issuer
+        value: 5stack
