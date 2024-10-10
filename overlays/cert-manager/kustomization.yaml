@@ -58,21 +58,40 @@ replacements:
         fieldPaths:
           - spec.acme.email
 
-
-  - source:
-      kind: ConfigMap
-      name: api-config
-      fieldPath: data.WEB_DOMAIN
-    targets:
-      - select:
-          kind: Ingress
-          name: '.*'
-        fieldPaths:
-          - metadata.annotations.[cert-manager.io/cluster-issuer]
+patches:
   - target:
+      group: networking.k8s.io
+      version: v1
       kind: Ingress
-      name: '.*'
-    patch: |-
-      - op: add
-        path: /metadata/annotations/cert-manager.io~1cluster-issuer
-        value: 5stack
+      name: api
+    path: ingress-patch.yaml
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: demos
+    path: ingress-patch.yaml
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: s3-console
+    path: ingress-patch.yaml
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: typesense
+    path: ingress-patch.yaml
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: web
+    path: ingress-patch.yaml
+  - target:
+      group: networking.k8s.io
+      version: v1
+      kind: Ingress
+      name: ws
+    path: ingress-patch.yaml
