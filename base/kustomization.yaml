@@ -7,7 +7,7 @@ resources:
   - game-server-node-connector
   - hasura
   - minio
-  - postgres
+  - timescaledb
   - redis
   - typesense
   - web
@@ -25,10 +25,10 @@ configMapGenerator:
     envs:
       - properties/typesense-config.env
     behavior: merge
-  - name: postgres-config
+  - name: timescaledb-config
     namespace: 5stack
     envs:
-      - properties/postgres-config.env
+      - properties/timescaledb-config.env
   - name: s3-config
     namespace: 5stack
     envs:
@@ -112,11 +112,12 @@ secretGenerator:
     namespace: 5stack
     envs:
       - secrets/api-secrets.env
-  - name: postgres-secrets
+
+  - name: timescaledb-secrets
     type: Opaque
     namespace: 5stack
     envs:
-      - secrets/postgres-secrets.env
+      - secrets/timescaledb-secrets.env
   - name: tailscale-secrets
     type: Opaque
     namespace: 5stack

@@ -1,30 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres
+  name: timescaledb
   namespace: 5stack
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: timescaledb
   template:
     metadata:
       labels:
-        app: postgres
+        app: timescaledb
     spec:
       affinity:
         nodeAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                  - key: 5stack-postgres
+                  - key: 5stack-timescaledb
                     operator: In
                     values:
                       - 'true'
       containers:
-        - name: postgres
-          image: postgres:16.4
+        - name: timescaledb
+          image: timescale/timescaledb:latest-pg17
           args:
             - postgres
             - '-c'
@@ -34,9 +34,9 @@ spec:
               protocol: TCP
           envFrom:
             - secretRef:
-                name: postgres-secrets
+                name: timescaledb-secrets
             - configMapRef:
-                name: postgres-config
+                name: timescaledb-config
           env:
             - name: APP_KEY
               valueFrom:
@@ -47,13 +47,13 @@ spec:
             - name: api-secrets
               mountPath: /etc/api-secrets
               readOnly: true
-            - name: postgres-data
-              mountPath: /var/lib/postgresql/data
-              subPath: postgres
+            - name: timescaledb-data
+              mountPath: /var/lib/timescaledbql/data
+              subPath: timescaledb
       volumes:
         - name: api-secrets
           secret:
             secretName: api-secrets
-        - name: postgres-data
+        - name: timescaledb-data
           persistentVolumeClaim:
-            claimName: postgres-pvc
+            claimName: timescaledb-pvc

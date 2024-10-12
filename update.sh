@@ -68,18 +68,18 @@ fi
 
 echo "using kubeconfig: $KUBECONFIG"
 
-POSTGRES_PASSWORD=$(grep "^POSTGRES_PASSWORD=" base/secrets/postgres-secrets.env | cut -d '=' -f2-)
-POSTGRES_CONNECTION_STRING="postgres://hasura:$POSTGRES_PASSWORD@postgres:5432/hasura"
+POSTGRES_PASSWORD=$(grep "^POSTGRES_PASSWORD=" base/secrets/timescaledb-secrets.env | cut -d '=' -f2-)
+POSTGRES_CONNECTION_STRING="postgres://hasura:$POSTGRES_PASSWORD@timescaledb:5432/hasura"
 
-if grep -q "^POSTGRES_CONNECTION_STRING=" base/secrets/postgres-secrets.env; then
+if grep -q "^POSTGRES_CONNECTION_STRING=" base/secrets/timescaledb-secrets.env; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        sed -i '' "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/postgres-secrets.env
+        sed -i '' "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/timescaledb-secrets.env
     else
-        sed -i "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/postgres-secrets.env
+        sed -i "s|^POSTGRES_CONNECTION_STRING=.*|POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING|" base/secrets/timescaledb-secrets.env
     fi
 else
-    echo "" >> base/secrets/postgres-secrets.env
-    echo "POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING" >> base/secrets/postgres-secrets.env
+    echo "" >> base/secrets/timescaledb-secrets.env
+    echo "POSTGRES_CONNECTION_STRING=$POSTGRES_CONNECTION_STRING" >> base/secrets/timescaledb-secrets.env
 fi
 
 K3S_TOKEN=$(cat /var/lib/rancher/k3s/server/node-token)

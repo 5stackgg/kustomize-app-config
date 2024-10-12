@@ -40,7 +40,7 @@ spec:
             - name: HASURA_GRAPHQL_DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: postgres-secrets
+                  name: timescaledb-secrets
                   key: POSTGRES_CONNECTION_STRING
           volumeMounts:
             - mountPath: /app
@@ -73,7 +73,7 @@ spec:
             - secretRef:
                 name: redis-secrets
             - secretRef:
-                name: postgres-secrets
+                name: timescaledb-secrets
             - configMapRef:
                 name: s3-config
           env:
@@ -82,6 +82,6 @@ spec:
       volumes:
         - emptyDir: {}
           name: workdir
-        - name: postgres-secrets
+        - name: timescaledb-secrets
           secret:
-            secretName: postgres-secrets
+            secretName: timescaledb-secrets

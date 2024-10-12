@@ -47,7 +47,7 @@ spec:
             - secretRef:
                 name: redis-secrets
             - secretRef:
-                name: postgres-secrets
+                name: timescaledb-secrets
             - secretRef:
                 name: tailscale-secrets
             - secretRef:

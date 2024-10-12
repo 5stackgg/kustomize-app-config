@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
+  name: timescaledb
   namespace: 5stack
 spec:
   ports:
@@ -9,4 +9,4 @@ spec:
       protocol: TCP
       targetPort: 5432
   selector:
-    app: postgres
+    app: timescaledb
