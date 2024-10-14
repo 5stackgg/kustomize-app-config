@@ -7,4 +7,4 @@
   value:
     - hosts:
         - HOST
-      secretName: secret-tls
+      secretName: 5stack-ssl
