@@ -7,4 +7,4 @@
   value:
     - hosts:
         - HOST
-      secretName: letsencrypt-prod
+      secretName: secret-tls
