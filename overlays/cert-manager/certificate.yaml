@@ -15,5 +15,5 @@ spec:
   - ${S3_CONSOLE_HOST}
   - ${WS_DOMAIN}
   issuerRef:
-    name: letsencrypt-prod
+    name: 5stack-issuer
     kind: Issuer
