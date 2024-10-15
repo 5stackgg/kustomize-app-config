@@ -31,6 +31,11 @@ spec:
           ports:
             - containerPort: 5585
             - containerPort: 5586
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
           envFrom:
             - configMapRef:
                 name: api-config
