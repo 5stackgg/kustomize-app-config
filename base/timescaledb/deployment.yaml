@@ -48,7 +48,7 @@ spec:
               mountPath: /etc/api-secrets
               readOnly: true
             - name: timescaledb-data
-              mountPath: /var/lib/timescaledbql/data
+              mountPath: /var/lib/postgresql/data
               subPath: timescaledb
       volumes:
         - name: api-secrets
