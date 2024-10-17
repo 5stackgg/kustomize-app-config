@@ -7,13 +7,6 @@ for file in base/secrets/*.env.example; do
     fi
 done
 
-for file in overlays/dev/secrets/*.env.example; do
-    env_file="${file%.example}"
-    if [ ! -f "$env_file" ]; then
-        cp "$file" "$env_file"
-    fi
-done
-
 for file in base/properties/*.env.example; do
     env_file="${file%.example}"
     if [ ! -f "$env_file" ]; then

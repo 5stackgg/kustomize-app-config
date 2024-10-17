@@ -87,6 +87,12 @@ spec:
                 name: api
                 port:
                   number: 5585
+            path: /discord-invite
+          - backend:
+              service:
+                name: api
+                port:
+                  number: 5585
             path: /discord-bot
             pathType: Exact
           - backend:
