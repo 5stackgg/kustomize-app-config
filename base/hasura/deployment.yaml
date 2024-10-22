@@ -46,15 +46,6 @@ spec:
             - mountPath: /app
               name: workdir
       initContainers:
-        - name: api-hasura-dir
-          image: ghcr.io/5stackgg/api:latest
-          command:
-            - /bin/sh
-            - -c
-            - cp -r /opt/5stack/hasura /app
-          volumeMounts:
-            - mountPath: /app
-              name: workdir
         - name: migrations
           image: ghcr.io/5stackgg/api:latest
           envFrom:
