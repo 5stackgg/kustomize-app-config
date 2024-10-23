@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: 5stack.gg
+    - host: ${WEB_DOMAIN}
       http:
         paths:
           - backend:

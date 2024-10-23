@@ -120,7 +120,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: upload.5stack.gg
+    - host: $(DEMOS_DOMAIN)
       http:
         paths:
           - backend:
