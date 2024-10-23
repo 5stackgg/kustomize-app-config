@@ -48,6 +48,12 @@ spec:
       initContainers:
         - name: migrations
           image: ghcr.io/5stackgg/api:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              cp -r /opt/5stack/hasura /app &&
+              node dist/src/main.js
           envFrom:
             - configMapRef:
                 name: api-config
@@ -70,6 +76,9 @@ spec:
           env:
             - name: RUN_MIGRATIONS
               value: "true"
+          volumeMounts:
+            - mountPath: /app
+              name: workdir
       volumes:
         - emptyDir: {}
           name: workdir
