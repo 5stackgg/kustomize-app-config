@@ -4,13 +4,13 @@ metadata:
   labels:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: ingress-nginx
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/version: 1.1.1
-    helm.sh/chart: ingress-nginx-4.0.15
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.12.0-beta.0
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
+  externalTrafficPolicy: Local
   ipFamilies:
   - IPv4
   ipFamilyPolicy: SingleStack
